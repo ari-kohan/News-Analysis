@@ -42,17 +42,17 @@ mkdir -p logs
 start_process "Flask app" "flask run --port=5001 --debug"
 
 # Start Celery worker
-start_process "Celery worker" "celery --app celery_app worker --loglevel=info"
+start_process "Celery worker" "celery --app celery_app worker --loglevel=info --logfile=logs/celery_worker.log"
 
 # Start Celery beat
-start_process "Celery beat" "celery --app celery_app beat --loglevel=info"
+start_process "Celery beat" "celery --app celery_app beat --loglevel=info --logfile=logs/celery_worker.log"
 
 # Function to cleanup background processes on script exit
 cleanup() {
     echo
     echo "Stopping all processes..."
-    pkill -f "flask" || true
-    pkill -f "celery" || true
+    pkill -f flask || true
+    pkill -f celery || true
     echo "All processes stopped"
     exit 0
 }

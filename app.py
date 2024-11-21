@@ -1,32 +1,60 @@
-from flask import Flask, render_template, request, jsonify, abort
+from flask import Flask, render_template, request, jsonify, abort, g
 from datetime import datetime, timedelta
 import os
 from guardian_api import GuardianAPI  # Assuming previous code is in guardian_api.py
 import json
+import sqlite3
 
-from db import search_news, get_news_by_uid, get_all_news
+from db import DATABASE, search_news, get_news_by_uid, get_all_news, insert_news
+from rss_reader import read_rss_feeds
+
 
 app = Flask(__name__)
 
-# Configure Guardian API
-# GUARDIAN_API_KEY = os.getenv('GUARDIAN_API_KEY')
-# guardian = GuardianAPI(GUARDIAN_API_KEY)
 
-# Create templates folder with following files:
-"""
-templates/
-    base.html
-    index.html
-    article.html
-    search.html
-"""
+def get_db():
+    """Connect to the database"""
+    db = getattr(g, "_database", None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
+
+def init_db():
+    """Initialize the database"""
+    with app.app_context():
+        db = get_db()
+        with app.open_resource("schema.sql", mode="r") as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, "_database", None)
+    if db is not None:
+        db.close()
+
+
+def setup():
+    """Behavior before first request is executed"""
+    # Initialize the database
+    init_db()
+    # Read RSS feeds
+    news_data = read_rss_feeds()
+    # Insert news into the database
+    insert_news(get_db(), news_data)
+
+
+with app.app_context():
+    setup()
 
 
 @app.route("/")
 def index():
     try:
         # Get latest news
-        results = get_all_news()
+        results = get_all_news(get_db())
 
         return render_template(
             "index.html",
@@ -41,7 +69,7 @@ def index():
 @app.route("/article/<path:uid>")
 def article_detail(uid):
     try:
-        article = get_news_by_uid(uid)
+        article = get_news_by_uid(get_db(), uid)
         return render_template("article.html", article=article)
     except Exception as e:
         app.logger.error(f"Error fetching article {uid}: {str(e)}")
@@ -56,7 +84,7 @@ def search():
         return render_template("search.html")
 
     try:
-        results = search_news(query)
+        results = search_news(get_db(), query)
         return render_template(
             "search.html",
             articles=results,

@@ -11,9 +11,9 @@ import uuid
 from datetime import datetime
 import zoneinfo
 from logging import log
+import bs4
 
 from data import NewsData
-from db import insert_news
 from data_ingestor import DataIngestor
 
 RSS_SOURCES = ["https://thehill.com/homenews/feed/"]
@@ -58,7 +58,7 @@ class RSSReader(DataIngestor):
         #         f"[fetch] {self.url} was checked less than {self.fetch_interval} seconds ago"
         #     )
         #     return
-        
+
         headers = {
             "User-Agent": "TrumpTracker"  # (+https://brntn.me/blog/respectfully-requesting-rss-feeds/)"
         }
@@ -106,18 +106,21 @@ class TheHillRSSReader(RSSReader):
         TODO clean with beautifulsoup
         """
         for entry in data.entries:
-            entry["summary"] = re.sub(r"<[^>]*>", "", entry["summary"])
+            entry["summary"] = bs4.BeautifulSoup(entry["summary"], "html.parser").text
             # strip all html tags and markup
             # strip style tags and their content
-            entry["content"][0]["value"] = re.sub(
-                r"<style[^>]*>.*?</style>",
-                "",
-                entry["content"][0]["value"],
-                flags=re.DOTALL,
-            )
-            entry["content"][0]["value"] = re.sub(
-                r"<[^>]*>", "", entry["content"][0]["value"]
-            )
+            # entry["content"][0]["value"] = re.sub(
+            #     r"<style[^>]*>.*?</style>",
+            #     "",
+            #     entry["content"][0]["value"],
+            #     flags=re.DOTALL,
+            # )
+            # entry["content"][0]["value"] = re.sub(
+            #     r"<[^>]*>", "", entry["content"][0]["value"]
+            # )
+            entry["content"][0]["value"] = bs4.BeautifulSoup(
+                entry["content"][0]["value"], "html.parser"
+            ).text
             entry["content"][0]["value"] = entry["content"][0]["value"].replace(
                 "\n\t\t\n\t\t\n\n\n", ""
             )
@@ -185,9 +188,9 @@ def read_rss_feeds() -> None:
             )
             for item in data
         ]
-        insert_news(news_data)
-        #save_rss(f"rss_feed_{i}.json", data)
+        # save_rss(f"rss_feed_{i}.json", data)
         i += 1
+    return news_data
 
 
 if __name__ == "__main__":
