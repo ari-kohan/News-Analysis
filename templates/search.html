@@ -28,20 +28,19 @@
     {% for article in articles %}
     <article class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-bold mb-2">
-            <a href="{{ url_for('article_detail', article_id=article.id) }}"
+            <a href="article/{{ article.uid }}" 
                class="text-blue-600 hover:text-blue-800">
                 {{ article.title }}
             </a>
         </h2>
         
         <div class="text-gray-600 mb-2">
-            {{ article.section_name }} | 
-            {{ article.publication_date[:10] }}
+            {{ article.date }}
         </div>
         
-        {% if article.body_text %}
+        {% if article.content %}
         <p class="text-gray-700">
-            {{ article.body_text[:200] }}...
+            {{ article.content[:200] }}...
         </p>
         {% endif %}
     </article>
