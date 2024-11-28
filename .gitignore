@@ -1,3 +1,4 @@
+# Python gitignore
 *.pyc
 __pycache__/
 venv/
@@ -13,3 +14,31 @@ build/
 .DS_Store
 *.db
 logs/*
+*.json
+
+
+# Node gitignore
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
