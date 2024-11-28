@@ -22,5 +22,4 @@ class NewsData:
     # The source of the news article
     link: str
     # The link to the news article
-    summary: str
-    # The summary of the news article
+

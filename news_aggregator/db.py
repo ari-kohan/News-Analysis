@@ -5,7 +5,7 @@ Reads, writes, and searches the db
 
 from typing import Optional
 import sqlite3
-from data import NewsData
+from data_ingestors.data import NewsData
 
 DATABASE = "news.db"
 

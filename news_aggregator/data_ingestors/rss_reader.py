@@ -12,52 +12,24 @@ from datetime import datetime
 import zoneinfo
 from logging import log
 import bs4
+from time import mktime
 
-from data import NewsData
-from data_ingestor import DataIngestor
-
-RSS_SOURCES = ["https://thehill.com/homenews/feed/"]
-DATE_FORMAT = "%a, %d %b %Y %H:%M:%S %z"  # "Tue, 19 Nov 2024 22:29:18 +0000"
-
-"""
-Data Format
-{
-    "title": str,
-    "link": str,
-    "authors": list[str],
-    "date": str,
-    "summary": str,
-    "content": str,
-    "source": str,
-    "uid": str
-}
-"""
+from .data import NewsData
+from .data_ingestor import DataIngestor, IngestorType
 
 
 class RSSReader(DataIngestor):
     """A base class for RSS based data ingestors"""
 
-    last_fetched_time: Optional[datetime] = None
-    last_etag: Optional[str] = None
-    fetch_interval: int = 3600
+    date_format: str
 
-    def fetch(self):
+    type = IngestorType.RSS
+
+    def fetch(self, last_fetched_time: Optional[datetime] = None, last_etag: Optional[str] = None):
         """
         Fetch the most recent RSS feed
         Fetch logic credit to https://brntn.me/blog/respectfully-requesting-rss-feeds/
         """
-        # do not fetch if we are within fetch interval
-        # if (
-        #     self.last_fetched_time
-        #     and (
-        #         datetime.now(tz=zoneinfo.ZoneInfo("UTC")) - self.last_fetched_time
-        #     ).seconds
-        #     < self.fetch_interval
-        # ):
-        #     log.info(
-        #         f"[fetch] {self.url} was checked less than {self.fetch_interval} seconds ago"
-        #     )
-        #     return
 
         headers = {
             "User-Agent": "TrumpTracker"  # (+https://brntn.me/blog/respectfully-requesting-rss-feeds/)"
@@ -66,33 +38,28 @@ class RSSReader(DataIngestor):
         response = feedparser.parse(
             self.url,
             request_headers=headers,
-            etag=self.last_etag,
-            modified=self.last_fetched_time,
+            etag=last_etag,
+            modified=last_fetched_time,
         )
 
         # return immediately if 304 is returned
         if response.status == 304:
             # content is unchanged
-            log.info(f"[fetch] {self.url} is unchanged")
+            log(f"[fetch] {self.url} is unchanged")
             self.last_checked_utc = datetime.now(tz=zoneinfo.ZoneInfo("UTC"))
             return
 
         # backoff if we receive a 429 response
         if response.status != 200:
             log.info(f"[fetch] {self.url} returned {response.status}")
-            self.check_interval = self.check_interval + self.check_interval
-            if self.check_interval > 60 * 60 * 24:
-                self.check_interval = 60 * 60 * 24
-            self.last_checked_utc = datetime.now(tz=zoneinfo.ZoneInfo("UTC"))
-            self.save()
             return
 
         # save ETag and last checked timestamp
+        etag = None
         if response.headers.get("etag"):
-            self.last_etag = response.headers["etag"]
+            etag = response.headers["etag"]
 
-        self.last_fetched_time = datetime.now(tz=zoneinfo.ZoneInfo("UTC"))
-        return response
+        return response, etag
 
 
 class TheHillRSSReader(RSSReader):
@@ -106,18 +73,6 @@ class TheHillRSSReader(RSSReader):
         TODO clean with beautifulsoup
         """
         for entry in data.entries:
-            entry["summary"] = bs4.BeautifulSoup(entry["summary"], "html.parser").text
-            # strip all html tags and markup
-            # strip style tags and their content
-            # entry["content"][0]["value"] = re.sub(
-            #     r"<style[^>]*>.*?</style>",
-            #     "",
-            #     entry["content"][0]["value"],
-            #     flags=re.DOTALL,
-            # )
-            # entry["content"][0]["value"] = re.sub(
-            #     r"<[^>]*>", "", entry["content"][0]["value"]
-            # )
             entry["content"][0]["value"] = bs4.BeautifulSoup(
                 entry["content"][0]["value"], "html.parser"
             ).text
@@ -146,8 +101,7 @@ class TheHillRSSReader(RSSReader):
                     "title": entry["title"],
                     "link": entry["link"],
                     "authors": [author["name"] for author in entry["authors"]],
-                    "date": datetime.strptime(entry["published"], DATE_FORMAT),
-                    "summary": entry["summary"],
+                    "date": datetime.fromtimestamp(mktime(entry["updated_parsed"])),
                     "content": entry["content"][0]["value"],
                     "source": self.url,
                     "uid": str(uuid.uuid3(uuid.NAMESPACE_URL, entry["link"])),
@@ -191,7 +145,7 @@ class ProPublicaRSSReader(RSSReader):
                     "title": entry["title"],
                     "link": entry["link"],
                     "authors": entry["author"],
-                    "date": datetime.strptime(entry["published"], DATE_FORMAT),
+                    "date": datetime.fromtimestamp(mktime(entry["updated_parsed"])),
                     "content": entry["summary"],
                     "source": self.url,
                     "uid": str(uuid.uuid3(uuid.NAMESPACE_URL, entry["link"])),
@@ -236,7 +190,9 @@ def read_rss_feeds() -> None:
 if __name__ == "__main__":
     #read_rss_feeds()
     reader = ProPublicaRSSReader()
-    data = reader.fetch()
+    data, _ = reader.fetch()
     data = reader.clean_data(data)
+    breakpoint()
     data = reader.format_data(data)
-    save_rss_file("rss_feed.json", data)
+    breakpoint()
+    #save_rss_file("rss_feed.json", data)

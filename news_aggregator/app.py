@@ -1,14 +1,13 @@
 from flask import Flask, render_template, request, jsonify, abort, g
 from datetime import datetime, timedelta
 import os
-from guardian_api import GuardianAPI  # Assuming previous code is in guardian_api.py
 import json
 import sqlite3
 from celery import Celery, Task
 
 
 from db import DATABASE, search_news, get_news_by_uid, get_all_news, insert_news
-from rss_reader import read_rss_feeds
+from data_ingestors.rss_reader import read_rss_feeds
 
 
 app = Flask(__name__)

@@ -1,0 +1,30 @@
+Firestore:
+Article:
+- id (hashed from url)
+- source
+- text
+- url
+- image
+- date
+- authors
+- analysed
+
+Source:
+- Name
+- Type (Enum: RSS, API)
+- url
+- last fetched time
+- last etag
+
+Cloud SQL
+Article:
+- id from firestore
+- summary
+- people
+- places
+- organizatons
+- agencies
+- laws
+- climate
+
+
