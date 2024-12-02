@@ -1,4 +1,5 @@
-import { X, Globe, Calendar, Users, Tag } from 'lucide-react';
+import React from 'react';
+import { X, Globe, Calendar, Users } from 'lucide-react';
 import { Article } from '../types';
 
 interface ArticleModalProps {
@@ -20,20 +21,12 @@ export function ArticleModal({ article, onClose }: ArticleModalProps) {
           </button>
         </div>
 
-        {article.imageUrl && (
-          <img
-            src={article.imageUrl}
-            alt={article.title}
-            className="w-full h-64 object-cover"
-          />
-        )}
-
         <div className="p-6">
           <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
             <div className="flex items-center gap-1">
               <Globe size={16} />
               <a
-                href={article.url}
+                href={article.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-600"
@@ -43,27 +36,18 @@ export function ArticleModal({ article, onClose }: ArticleModalProps) {
             </div>
             <div className="flex items-center gap-1">
               <Calendar size={16} />
-              <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
+              <span>{new Date(article.date).toLocaleDateString()}</span>
             </div>
+            {article.authors.length > 0 && (
+              <div className="flex items-center gap-1">
+                <Users size={16} />
+                <span>{article.authors}</span>
+              </div>
+            )}
           </div>
 
           <div className="prose max-w-none">
-            <p className="text-lg font-medium mb-4">{article.summary}</p>
-            <div dangerouslySetInnerHTML={{ __html: article.content }} />
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="flex flex-wrap gap-2">
-              {article.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
-                >
-                  <Tag size={14} />
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <div className="whitespace-pre-wrap">{article.content}</div>
           </div>
         </div>
       </div>

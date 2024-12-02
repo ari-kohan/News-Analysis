@@ -3,10 +3,11 @@ import { Newspaper } from 'lucide-react';
 import { SearchBar } from './components/SearchBar';
 import { ArticleCard } from './components/ArticleCard';
 import { ArticleModal } from './components/ArticleModal';
-// import { AdminPanel } from './components/AdminPanel';
+import { AdminPanel } from './components/AdminPanel';
 import { Article, SearchFilters } from './types';
 import { useArticles } from './hooks/useArticles';
 import { TagProvider, useTag } from './contexts/TagContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function AppContent() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,16 +83,20 @@ function AppContent() {
         )}
       </main>
 
-      {/* <AdminPanel /> */}
+      <AdminPanel />
     </div>
   );
 }
 
 function App() {
   return (
-    <TagProvider>
-      <AppContent />
-    </TagProvider>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <TagProvider>
+        <ErrorBoundary fallback={<div>Failed to load content</div>}>
+          <AppContent />
+        </ErrorBoundary>
+      </TagProvider>
+    </ErrorBoundary>
   );
 }
 

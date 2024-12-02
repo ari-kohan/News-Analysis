@@ -1,15 +1,11 @@
 export interface Article {
   id: string;
   title: string;
-  summary: string;
   content: string;
-  publishedAt: string;
+  date: string;
   source: string;
-  url: string;
-  imageUrl?: string;
-  tags: string[];
-  topics: string[];
-  people: string[];
+  link: string;
+  authors: string[];
 }
 
 export interface SearchFilters {
