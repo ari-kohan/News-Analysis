@@ -1,0 +1,83 @@
+extend type Query {
+  """
+  ✨ Look up a single `Article` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  article(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Article_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Article_FirstRow
+  ): Article @fdc_generated(from: "Article", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ArticleAnalysis` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  articleAnalysis(
+    """
+    The key used to identify the object.
+    """
+    key: ArticleAnalysis_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ArticleAnalysis_FirstRow
+  ): ArticleAnalysis @fdc_generated(from: "ArticleAnalysis", purpose: QUERY_SINGLE)
+  """
+  ✨ List `Article` objects in the table, optionally filtered by `where` conditions.
+  """
+  articles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Article_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Article_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+  ): [Article!]! @fdc_generated(from: "Article", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ArticleAnalysis` objects in the table, optionally filtered by `where` conditions.
+  """
+  articleAnalyses(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ArticleAnalysis_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ArticleAnalysis_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+  ): [ArticleAnalysis!]! @fdc_generated(from: "ArticleAnalysis", purpose: QUERY_MULTIPLE)
+}

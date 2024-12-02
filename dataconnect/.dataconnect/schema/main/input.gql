@@ -1,0 +1,336 @@
+"""
+✨ `Article_KeyOutput` returns the primary key fields of table type `Article`.
+
+It has the same format as `Article_Key`, but is only used as mutation return value.
+"""
+scalar Article_KeyOutput
+"""
+✨ `ArticleAnalysis_KeyOutput` returns the primary key fields of table type `ArticleAnalysis`.
+
+It has the same format as `ArticleAnalysis_Key`, but is only used as mutation return value.
+"""
+scalar ArticleAnalysis_KeyOutput
+"""
+✨ Generated data input type for table 'Article'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Article_Data {
+  """
+  ✨ Generated from Field `Article`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Article`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Article`.`authors` of type `[String]!`
+  """
+  authors: [String!]
+  """
+  ✨ Generated from Field `Article`.`date` of type `Timestamp!`
+  """
+  date: Timestamp
+  """
+  ✨ `_expr` server value variant of `date` (✨ Generated from Field `Article`.`date` of type `Timestamp!`)
+  """
+  date_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `date` (✨ Generated from Field `Article`.`date` of type `Timestamp!`)
+  """
+  date_time: Timestamp_Relative
+  """
+  ✨ Generated from Field `Article`.`link` of type `String!`
+  """
+  link: String
+  """
+  ✨ `_expr` server value variant of `link` (✨ Generated from Field `Article`.`link` of type `String!`)
+  """
+  link_expr: String_Expr
+  """
+  ✨ Generated from Field `Article`.`source` of type `String!`
+  """
+  source: String
+  """
+  ✨ `_expr` server value variant of `source` (✨ Generated from Field `Article`.`source` of type `String!`)
+  """
+  source_expr: String_Expr
+  """
+  ✨ Generated from Field `Article`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `Article`.`title` of type `String!`)
+  """
+  title_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Article'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Article_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Article_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Article_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Article_Filter!]
+  """
+  ✨ Generated from Field `Article`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Article`.`authors` of type `[String]!`
+  """
+  authors: String_ListFilter
+  """
+  ✨ Generated from Field `Article`.`date` of type `Timestamp!`
+  """
+  date: Timestamp_Filter
+  """
+  ✨ Generated from Field `Article`.`link` of type `String!`
+  """
+  link: String_Filter
+  """
+  ✨ Generated from Field `Article`.`source` of type `String!`
+  """
+  source: String_Filter
+  """
+  ✨ Generated from Field `Article`.`title` of type `String!`
+  """
+  title: String_Filter
+  """
+  ✨ Generated from Field `Article`.`articleAnalysis_on_article` of type `ArticleAnalysis`
+  """
+  articleAnalysis_on_article: ArticleAnalysis_Filter
+}
+"""
+✨ Generated first-row input type for table 'Article'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Article_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Article_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Article_Filter
+}
+"""
+✨ Generated key input type for table 'Article'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Article_Key {
+  """
+  ✨ Generated from Field `Article`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Article`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Article'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Article_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Article_Filter
+}
+"""
+✨ Generated order input type for table 'Article'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Article_Order {
+  """
+  ✨ Generated from Field `Article`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Article`.`date` of type `Timestamp!`
+  """
+  date: OrderDirection
+  """
+  ✨ Generated from Field `Article`.`link` of type `String!`
+  """
+  link: OrderDirection
+  """
+  ✨ Generated from Field `Article`.`source` of type `String!`
+  """
+  source: OrderDirection
+  """
+  ✨ Generated from Field `Article`.`title` of type `String!`
+  """
+  title: OrderDirection
+}
+"""
+✨ Generated data input type for table 'ArticleAnalysis'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input ArticleAnalysis_Data {
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`articleId` of type `UUID!`
+  """
+  articleId: UUID
+  """
+  ✨ `_expr` server value variant of `articleId` (✨ Generated from Field `ArticleAnalysis`.`articleId` of type `UUID!`)
+  """
+  articleId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`article` of type `Article!`
+  """
+  article: Article_Key
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`agencies` of type `[String]`
+  """
+  agencies: [String!]
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `Boolean`
+  """
+  climate: Boolean
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`laws` of type `[String]`
+  """
+  laws: [String!]
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`people` of type `[String]`
+  """
+  people: [String!]
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`places` of type `[String]`
+  """
+  places: [String!]
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`summary` of type `String`
+  """
+  summary: String
+  """
+  ✨ `_expr` server value variant of `summary` (✨ Generated from Field `ArticleAnalysis`.`summary` of type `String`)
+  """
+  summary_expr: String_Expr
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`tags` of type `[String]`
+  """
+  tags: [String!]
+}
+"""
+✨ Generated filter input type for table 'ArticleAnalysis'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input ArticleAnalysis_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [ArticleAnalysis_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: ArticleAnalysis_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [ArticleAnalysis_Filter!]
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`articleId` of type `UUID!`
+  """
+  articleId: UUID_Filter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`article` of type `Article!`
+  """
+  article: Article_Filter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`agencies` of type `[String]`
+  """
+  agencies: String_ListFilter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `Boolean`
+  """
+  climate: Boolean_Filter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`laws` of type `[String]`
+  """
+  laws: String_ListFilter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`people` of type `[String]`
+  """
+  people: String_ListFilter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`places` of type `[String]`
+  """
+  places: String_ListFilter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`summary` of type `String`
+  """
+  summary: String_Filter
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`tags` of type `[String]`
+  """
+  tags: String_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'ArticleAnalysis'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input ArticleAnalysis_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [ArticleAnalysis_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: ArticleAnalysis_Filter
+}
+"""
+✨ Generated key input type for table 'ArticleAnalysis'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input ArticleAnalysis_Key {
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`articleId` of type `UUID!`
+  """
+  articleId: UUID
+  """
+  ✨ `_expr` server value variant of `articleId` (✨ Generated from Field `ArticleAnalysis`.`articleId` of type `UUID!`)
+  """
+  articleId_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'ArticleAnalysis'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input ArticleAnalysis_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: ArticleAnalysis_Filter
+}
+"""
+✨ Generated order input type for table 'ArticleAnalysis'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input ArticleAnalysis_Order {
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`articleId` of type `UUID!`
+  """
+  articleId: OrderDirection
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`article` of type `Article!`
+  """
+  article: Article_Order
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `Boolean`
+  """
+  climate: OrderDirection
+  """
+  ✨ Generated from Field `ArticleAnalysis`.`summary` of type `String`
+  """
+  summary: OrderDirection
+}

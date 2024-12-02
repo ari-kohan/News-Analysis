@@ -1,0 +1,6 @@
+extend type Article {
+  """
+  ✨ List `ArticleAnalysis` objects in a one-to-one relationship (where `ArticleAnalysis`.`article` is this object).
+  """
+  articleAnalysis_on_article: ArticleAnalysis @fdc_generated(from: "ArticleAnalysis.article", purpose: QUERY_SINGLE_ONE_TO_ONE)
+}

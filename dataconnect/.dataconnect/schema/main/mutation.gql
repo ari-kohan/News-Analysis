@@ -1,0 +1,216 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `Article` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  article_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Article_Data!
+  ): Article_KeyOutput! @fdc_generated(from: "Article", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ArticleAnalysis` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  articleAnalysis_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ArticleAnalysis_Data!
+  ): ArticleAnalysis_KeyOutput! @fdc_generated(from: "ArticleAnalysis", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `Article` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  article_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Article_Data!]!
+  ): [Article_KeyOutput!]! @fdc_generated(from: "Article", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ArticleAnalysis` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  articleAnalysis_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ArticleAnalysis_Data!]!
+  ): [ArticleAnalysis_KeyOutput!]! @fdc_generated(from: "ArticleAnalysis", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `Article` into the table, based on the primary key. Returns the key of the newly inserted `Article`.
+  """
+  article_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Article_Data!
+  ): Article_KeyOutput! @fdc_generated(from: "Article", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ArticleAnalysis` into the table, based on the primary key. Returns the key of the newly inserted `ArticleAnalysis`.
+  """
+  articleAnalysis_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ArticleAnalysis_Data!
+  ): ArticleAnalysis_KeyOutput! @fdc_generated(from: "ArticleAnalysis", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `Article` objects into the table, based on the primary key. Returns the key of the newly inserted `Article`.
+  """
+  article_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Article_Data!]!
+  ): [Article_KeyOutput!]! @fdc_generated(from: "Article", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ArticleAnalysis` objects into the table, based on the primary key. Returns the key of the newly inserted `ArticleAnalysis`.
+  """
+  articleAnalysis_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ArticleAnalysis_Data!]!
+  ): [ArticleAnalysis_KeyOutput!]! @fdc_generated(from: "ArticleAnalysis", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `Article` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  article_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Article_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Article_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Article_Data!
+  ): Article_KeyOutput @fdc_generated(from: "Article", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ArticleAnalysis` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  articleAnalysis_update(
+    """
+    The key used to identify the object.
+    """
+    key: ArticleAnalysis_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ArticleAnalysis_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ArticleAnalysis_Data!
+  ): ArticleAnalysis_KeyOutput @fdc_generated(from: "ArticleAnalysis", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `Article` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  article_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Article_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Article_Data!
+  ): Int! @fdc_generated(from: "Article", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ArticleAnalysis` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  articleAnalysis_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ArticleAnalysis_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ArticleAnalysis_Data!
+  ): Int! @fdc_generated(from: "ArticleAnalysis", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `Article` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  article_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Article_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Article_FirstRow
+  ): Article_KeyOutput @fdc_generated(from: "Article", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ArticleAnalysis` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  articleAnalysis_delete(
+    """
+    The key used to identify the object.
+    """
+    key: ArticleAnalysis_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ArticleAnalysis_FirstRow
+  ): ArticleAnalysis_KeyOutput @fdc_generated(from: "ArticleAnalysis", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `Article` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  article_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Article_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Article", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ArticleAnalysis` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  articleAnalysis_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ArticleAnalysis_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ArticleAnalysis", purpose: DELETE_MULTIPLE)
+}

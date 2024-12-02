@@ -1,0 +1,8 @@
+# This is a file for you to write an un-named mutation. 
+# Only one un-named mutation is allowed per file.
+mutation {
+  articleAnalysis_insertMany(
+    data: [{articleId: "11111111222233334444555555555555", agencies: ["FEMA"], climate: true, laws: "", people: ["Ted Cruz"], places: ["Florida"], summary: "", tags: ["Ted Cruz", "Florida", "FEMA"]},
+    {articleId: "11111111222233334444555555555556", agencies: [], climate: false, laws: "", people: ["Nancy Pelosi"], places: ["California"], summary: "", tags: ["Nancy Pelosi", "California"]}]
+  )
+}
