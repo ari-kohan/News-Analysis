@@ -68,3 +68,48 @@ mutation AddArticle (
         }
     )
 }
+
+mutation UpsertArticle (
+    $id: UUID!
+    $title: String!
+    $date: Timestamp!
+    $authors: [String!]
+    $source: String!
+    $link: String!
+) @auth(level: NO_ACCESS) {
+    article_upsert(
+        data: {
+            id: $id
+            title: $title
+            date: $date
+            authors: $authors
+            source: $source
+            link: $link
+        }
+    )
+}
+
+
+mutation DeleteArticle ($id: UUID!)  @auth(level: NO_ACCESS) {
+    article_delete(id: $id)
+}
+
+# mutation UpdateArticle (
+#     $id: UUID!
+#     $title: String?
+#     $date: Timestamp?
+#     $authors: [String]?
+#     $source: String?
+#     $link: String?   
+# )  @auth(level: NO_ACCESS) {
+#     article_update(
+#         id: $id
+#         data: {
+#             title: $title
+#             date: $date
+#             authors: $authors
+#             source: $source
+#             link: $link
+#         }
+#     )
+# }

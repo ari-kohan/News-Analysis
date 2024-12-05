@@ -1,6 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { logger } from '../utils/logger';
+import { connectDataConnectEmulator, getDataConnect } from 'firebase/data-connect';
+import { connectorConfig } from '@firebasegen/news-connector';
+import { getAuth } from 'firebase/auth';
 
 function validateConfig() {
   const requiredEnvVars = [
@@ -45,11 +48,9 @@ function initializeFirebase() {
 
     const app = initializeApp(firebaseConfig);
     logger.info(app.name);
-    const firestore = getFirestore(app);
-
     logger.info('Firebase initialized successfully');
 
-    return firestore;
+    return app;
   } catch (error) {
     logger.error('Failed to initialize Firebase:', error);
     throw error;
@@ -57,12 +58,15 @@ function initializeFirebase() {
 }
 
 let db: ReturnType<typeof getFirestore>;
+let dataconnect: ReturnType<typeof getDataConnect>;
 try {
-  db = initializeFirebase();
+  let app = initializeFirebase();
+  db = getFirestore(app)
+  dataconnect = getDataConnect(app, connectorConfig)
 } catch (error) {
   logger.error('Failed to initialize Firebase at module level:', error);
   // Instead of throwing, we might want to provide a fallback or handle gracefully
   db = null as any; // or some fallback/mock implementation
 }
 
-export { db };
+export { db, dataconnect };
