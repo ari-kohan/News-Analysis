@@ -1,20 +1,15 @@
 
 CREATE TABLE IF NOT EXISTS news (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    uid TEXT,
+    uuid UUID PRIMARY KEY,
     title TEXT,
-    content TEXT,
-    date DATETIME,
+    summary TEXT,
+    date TIMESTAMP,
     authors TEXT,
     source TEXT,
     link TEXT,
-    summary TEXT
-);
-
-CREATE TABLE IF NOT EXISTS feed_sources (    
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    url TEXT,
-    name TEXT,
-    last_accessed DATETIME,
-    last_etag TEXT
+    people TEXT[],
+    places TEXT[],
+    agencies TEXT[],
+    laws TEXT[],
+    climate boolean,
 );

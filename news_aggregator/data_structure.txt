@@ -1,8 +1,9 @@
 Firestore:
 Article:
 - id (hashed from url)
+- title
 - source
-- text
+- content
 - url
 - image
 - date

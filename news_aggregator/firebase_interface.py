@@ -1,6 +1,5 @@
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import db
 from firebase_admin import firestore
 import json
 from logging import log
@@ -70,6 +69,7 @@ def fetch_source_data(db):
                 db.collection("articles").document(d["uid"]).set(d)
                 new_articles.append(d["uid"])
     if new_articles:
+        print(new_articles)
         db.collection("article_ids").document("id").update({"articles": firestore.ArrayUnion(new_articles)})
 
 if __name__ == "__main__":
@@ -79,6 +79,7 @@ if __name__ == "__main__":
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred)
     db = firestore.client()
+    print(db._client_info.__dict__)
     #add_rss_readers_to_firebase(db)
     #fetch_source_data(db)
     
@@ -88,4 +89,6 @@ if __name__ == "__main__":
     #     articles.append(a.id)
     # print(articles)
     # db.collection("article_ids").document("id").set({"articles": articles})
+    print(db.collection("article_ids").document("id").get().to_dict())
+
 
