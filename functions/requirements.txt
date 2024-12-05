@@ -1,1 +1,11 @@
 firebase_functions~=0.1.0
+langchain==0.3.7
+langchain-core==0.3.19
+langchain-openai==0.2.9
+langchain-text-splitters==0.3.2
+langsmith==0.1.143
+feedparser==6.0.11
+beautifulsoup4==4.12.3
+black==24.10.0
+bs4==0.0.2
+cloud_sql_python_connector==1.14.0

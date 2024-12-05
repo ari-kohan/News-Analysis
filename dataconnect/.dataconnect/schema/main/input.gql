@@ -193,9 +193,9 @@ input ArticleAnalysis_Data {
   """
   agencies: [String!]
   """
-  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `Boolean`
+  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `[String]`
   """
-  climate: Boolean
+  climate: [String!]
   """
   ✨ Generated from Field `ArticleAnalysis`.`laws` of type `[String]`
   """
@@ -250,9 +250,9 @@ input ArticleAnalysis_Filter {
   """
   agencies: String_ListFilter
   """
-  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `Boolean`
+  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `[String]`
   """
-  climate: Boolean_Filter
+  climate: String_ListFilter
   """
   ✨ Generated from Field `ArticleAnalysis`.`laws` of type `[String]`
   """
@@ -325,10 +325,6 @@ input ArticleAnalysis_Order {
   ✨ Generated from Field `ArticleAnalysis`.`article` of type `Article!`
   """
   article: Article_Order
-  """
-  ✨ Generated from Field `ArticleAnalysis`.`climate` of type `Boolean`
-  """
-  climate: OrderDirection
   """
   ✨ Generated from Field `ArticleAnalysis`.`summary` of type `String`
   """

@@ -6,23 +6,6 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ],
-      "ignore": [
-        "venv",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ]
-    }
-  ],
   "hosting": {
     "public": "public",
     "ignore": [
@@ -35,11 +18,6 @@
     "rules": "storage.rules"
   },
   "emulators": {
-    "apphosting": {
-      "port": 5002,
-      "rootDirectory": "web_frontend",
-      "startCommandOverride": "npm run dev"
-    },
     "auth": {
       "port": 9099
     },
@@ -81,5 +59,18 @@
   "extensions": {},
   "database": {
     "rules": "database.rules.json"
-  }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "venv",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
 }

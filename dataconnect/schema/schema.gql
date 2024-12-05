@@ -62,7 +62,7 @@ type ArticleAnalysis @table(name: "ArticleAnalysis", key: ["article"]) {
     places: [String],
     agencies: [String],
     laws: [String],
-    climate: Boolean,
+    climate: [String],
     tags: [String],
 }
 

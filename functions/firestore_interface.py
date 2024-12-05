@@ -47,16 +47,18 @@ def fetch_source_data(db):
     (determined by a unique uid hashed from the url) add it to the firestore db
     """
     article_ids = db.collection("article_ids").document("id").get().to_dict()
-    existing_articles = set(article_ids["articles"])
+    existing_articles = []
+    if article_ids:
+        existing_articles = set(article_ids["articles"])
     new_articles = []
     for reader in RSSReader.__subclasses__():
         r = reader()
         name = type(r).__name__
         reader_data = db.collection("Data Sources").document(name).get()
+        reader_data = reader_data.to_dict()
         if not reader_data:
             log.warning(f"Could not find firestore data for reader {name}")
             return
-        reader_data = reader_data.to_dict()
         last_fetched = reader_data["last_fetched"]
         last_etag = reader_data["last_etag"]
         data, new_etag = r.fetch(last_fetched, last_etag)
@@ -69,8 +71,9 @@ def fetch_source_data(db):
                 db.collection("articles").document(d["uid"]).set(d)
                 new_articles.append(d["uid"])
     if new_articles:
-        print(new_articles)
         db.collection("article_ids").document("id").update({"articles": firestore.ArrayUnion(new_articles)})
+    return new_articles
+
 
 if __name__ == "__main__":
     # Fetch the service account key JSON file contents

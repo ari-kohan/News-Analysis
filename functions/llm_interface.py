@@ -49,7 +49,7 @@ COMPARISON_TEMPLATE = ChatPromptTemplate.from_template(
 
 INFORMATION_EXTRACTION_TEMPLATE = ChatPromptTemplate.from_template(
     """.
-    Extract the specified informatin from the provided text and format it in this json structure:
+    Extract the specified information from the provided text and format it in this json structure:
     {{
         summary: A 3-5 sentence summary of the text,
         people: A list of people mentioned in the text,

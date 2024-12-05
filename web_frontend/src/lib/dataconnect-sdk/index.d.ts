@@ -55,7 +55,7 @@ export interface GetArticleByIdData {
       places?: string[] | null;
       agencies?: string[] | null;
       laws?: string[] | null;
-      climate?: boolean | null;
+      climate?: string[] | null;
     };
   };
 }
