@@ -1,12 +1,12 @@
 specVersion: "v1beta"
-serviceId: "news_tracker"
-location: "us-central1"
+serviceId: "articles-dataconnect"
+location: "us-west1"
 schema:
   source: "./schema"
   datasource:
     postgresql:
-      database: "fdcdb"
+      database: "articles"
       cloudSql:
-        instanceId: "news_tracker-fdc"
+        instanceId: "news-tracker"
       # schemaValidation: "COMPATIBLE"
 connectorDirs: ["./connector"]

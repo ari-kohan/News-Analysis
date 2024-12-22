@@ -11,6 +11,11 @@ query {
       authors
     }
     summary
+    people
+    places
+    agencies
+    laws
     climate
+    tags
   }
 }

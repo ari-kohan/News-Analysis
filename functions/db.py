@@ -1,47 +1,24 @@
 """
 A set of functions to interact with the news database
 Reads, writes, and searches the db
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-CREATE TABLE articles (
-    id UUID PRIMARY KEY,
-    title TEXT NOT NULL,
-    date TIMESTAMP NOT NULL,
-    authors TEXT[] NOT NULL,
-    source TEXT NOT NULL,
-    link TEXT NOT NULL
-);
-
-CREATE TABLE article_analysis (
-    article_id UUID PRIMARY KEY REFERENCES articles(id),
-    summary TEXT,
-    people TEXT[],
-    places TEXT[],
-    agencies TEXT[],
-    laws TEXT[],
-    climate TEXT[],
-    tags TEXT[]
-);
 """
-
+import json
 from typing import Optional, Dict, Any
 import uuid
 from datetime import datetime
 import sqlalchemy
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
-from data_ingestors.data import NewsData
+from data_ingestors.data import NewsData, NewsAnalysis
 from google.cloud.sql.connector import Connector
-import atexit
-
+from llm_interface import extract_information
 
 # Initialize Connector object
 connector = Connector()
 
 # Database configuration - you might want to load these from environment variables
-INSTANCE_CONNECTION_NAME = "your-project:your-region:your-instance"
-DB_USER = "your-db-user"
+INSTANCE_CONNECTION_NAME = "news-tracker:us-central1:news_tracker-fdc"
+DB_USER = ""
 DB_PASS = "your-db-password"
 DB_NAME = "news"
 
@@ -73,17 +50,17 @@ def _format_article_for_db(news: NewsData) -> Dict[str, Any]:
         "link": news.link,
     }
 
-def _format_analysis_for_db(article_id: str, news: NewsData) -> Dict[str, Any]:
+def _format_analysis_for_db(article_id: str, news: NewsAnalysis) -> Dict[str, Any]:
     """Format analysis data for the ArticleAnalysis table"""
     return {
         "article_id": article_id,
         "summary": news.summary,
-        "people": [],  # These fields would need to be populated by your analysis logic
-        "places": [],
-        "agencies": [],
-        "laws": [],
-        "climate": [],
-        "tags": [],
+        "people": news.people,
+        "places": news.places,
+        "agencies": news.agencies,
+        "laws": news.laws,
+        "climate": news.climate,
+        "tags": news.tags,
     }
 
 def _filter_existing_articles(engine: Engine, links: list[str]) -> list[str]:
@@ -126,7 +103,7 @@ def insert_news(engine: Engine, news_items: list[NewsData]) -> None:
             )
             
             # Insert article analysis
-            analysis_data = _format_analysis_for_db(article_data["id"], news)
+            analysis_data = _format_analysis_for_db(article_data["id"], news.analysis)
             conn.execute(
                 text("""
                     INSERT INTO article_analysis 
@@ -231,9 +208,15 @@ def get_all_articles(engine: Engine, limit: int = 100) -> list[Dict[str, Any]]:
         return [dict(row) for row in result]
 
 # Clean up connector on program exit
+import atexit
 atexit.register(connector.close)
 
 if __name__ == "__main__":
     engine = get_engine()
-    articles = get_all_articles(engine)
-    print(f"Found {len(articles)} articles")
+    engine.connect()
+    # articles = get_all_articles(engine)
+    # print(f"Found {len(articles)} articles")
+
+    # insert_news(engine, [article_analysis])
+    # articles = get_all_articles(engine)
+    # print(f"Found {len(articles)} articles")

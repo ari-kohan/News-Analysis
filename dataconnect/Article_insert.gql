@@ -1,8 +1,9 @@
 # This is a file for you to write an un-named mutation. 
 # Only one un-named mutation is allowed per file.
 mutation {
-  article_insertMany(
-    data: [{id: "11111111222233334444555555555555", authors: ["1", "2"], date: "2024-11-30T00:25:05.368Z", link: "", source: "", title: "Florida Huricane"},
-    {id: "11111111222233334444555555555556", authors: ["1", "2"], date: "2024-11-30T00:25:05.368Z", link: "", source: "", title: "California Politics"}]
+  article_insert(
+    data: {id: "271938ac-4935-35d9-b88a-52b0ba84a05e", title: "Trump watches as Musk's SpaceX launches Starship rocket", date: "2024-12-22T01:02:16.849Z", authors: ["Brett Samuels"], source: "https://thehill.com/homenews/feed/", link: "https://thehill.com/policy/technology/4998878-trump-musk-spacex-launches-starship/"}
   )
 }
+
+#    data: [{id: "11111111222233334444555555555555", authors: ["1", "2"], date: "2024-11-30T00:25:05.368Z", link: "", source: "", title: "Florida Huricane"},

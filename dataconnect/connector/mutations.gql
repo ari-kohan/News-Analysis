@@ -113,3 +113,32 @@ mutation DeleteArticle ($id: UUID!)  @auth(level: NO_ACCESS) {
 #         }
 #     )
 # }
+
+mutation AddArticleAnalysis
+(
+    $articleId: UUID!
+    #article: Article! @ref,
+    $summary: String,
+    $people: [String!],
+    $places: [String!],
+    $agencies: [String!],
+    $laws: [String!],
+    $climate: [String!],
+    $tags: [String!],
+) @auth(level: NO_ACCESS) {
+    articleAnalysis_insert(
+        data: {
+            articleId: $articleId
+            people: $people
+            places: $places
+            agencies: $agencies
+            laws: $laws
+            climate: $climate
+            tags: $tags
+        }
+    )
+}
+
+mutation DeleteArticleAnalysis($key: ArticleAnalysis_Key)  @auth(level: NO_ACCESS) {
+    articleAnalysis_delete(key: $key)
+}

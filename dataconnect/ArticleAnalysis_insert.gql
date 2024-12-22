@@ -1,8 +1,7 @@
 # This is a file for you to write an un-named mutation. 
 # Only one un-named mutation is allowed per file.
 mutation {
-  articleAnalysis_insertMany(
-    data: [{articleId: "11111111222233334444555555555555", agencies: ["FEMA"], climate: ["ocean"], laws: "", people: ["Ted Cruz"], places: ["Florida"], summary: "", tags: ["Ted Cruz", "Florida", "FEMA"]},
-    {articleId: "11111111222233334444555555555556", agencies: [], climate: ["desert"], laws: "", people: ["Nancy Pelosi"], places: ["California"], summary: "", tags: ["Nancy Pelosi", "California"]}]
+  articleAnalysis_insert(
+    data: {articleId: "271938ac-4935-35d9-b88a-52b0ba84a05e", summary: "President-elect Trump and Elon Musk observed the launch of a SpaceX rocket in Texas, highlighting their close relationship since the election. Trump was accompanied by several Republican lawmakers and urged his party to resist Democratic judicial nominations. Musk, the CEO of Tesla and founder of SpaceX, has been a prominent figure alongside Trump, contributing to his campaign and joining him in discussions about cabinet positions. However, some within Trump's circle express concerns about Musk's influence and visibility.", people: ["Donald Trump", "Elon Musk", "Ted Cruz", "Bill Hagerty", "Kevin Cramer", "Ronny Jackson", "Vivek Ramaswamy"], places: ["Texas", "Brownsville", "Mar-a-Lago", "Palm Beach", "Washington"], agencies: [], laws: [], climate: [], tags: []}
   )
 }

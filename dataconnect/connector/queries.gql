@@ -99,3 +99,22 @@ query GetArticleById($id: UUID!) @auth(level: PUBLIC) {
         }
     }
 }
+
+query GetAllArticles @auth(level: PUBLIC) {
+  articleAnalyses{
+    article {
+        title
+        date
+        source
+        link
+        authors
+    }
+    summary
+    people
+    places
+    agencies
+    laws
+    climate
+    tags
+  }
+}
