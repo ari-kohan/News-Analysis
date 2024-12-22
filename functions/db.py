@@ -2,6 +2,7 @@
 A set of functions to interact with the news database
 Reads, writes, and searches the db
 """
+import os
 import json
 from typing import Optional, Dict, Any
 import uuid
@@ -11,16 +12,17 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from data_ingestors.data import NewsData, NewsAnalysis
 from google.cloud.sql.connector import Connector
-from llm_interface import extract_information
+from dotenv import load_dotenv
 
+load_dotenv()
 # Initialize Connector object
 connector = Connector()
 
-# Database configuration - you might want to load these from environment variables
-INSTANCE_CONNECTION_NAME = "news-tracker:us-central1:news_tracker-fdc"
-DB_USER = ""
-DB_PASS = "your-db-password"
-DB_NAME = "news"
+# Load configuration from environment variables
+INSTANCE_CONNECTION_NAME = os.environ["INSTANCE_CONNECTION_NAME"]
+DB_USER = os.environ["DB_USER"]
+DB_PASS = os.environ["DB_PASS"]
+DB_NAME = os.environ["DB_NAME"]
 
 def get_engine() -> Engine:
     """Create database connection engine using Cloud SQL Python Connector"""
@@ -137,8 +139,8 @@ def search_articles(engine: Engine, query: str) -> list[Dict[str, Any]]:
                     aa.laws,
                     aa.climate,
                     aa.tags
-                FROM articles a
-                LEFT JOIN article_analysis aa ON a.id = aa.article_id
+                FROM "Articles" a
+                LEFT JOIN "ArticleAnalysis" aa ON a.id = aa.article_id
                 WHERE 
                     LOWER(a.title) LIKE :query 
                     OR :query = ANY(aa.tags)
@@ -147,7 +149,7 @@ def search_articles(engine: Engine, query: str) -> list[Dict[str, Any]]:
             {"query": clean_query}
         )
         
-        return [dict(row) for row in result]
+        return result.mappings().all()
 
 def get_article_by_id(engine: Engine, article_id: str) -> Optional[Dict[str, Any]]:
     """
@@ -168,13 +170,13 @@ def get_article_by_id(engine: Engine, article_id: str) -> Optional[Dict[str, Any
                     aa.laws,
                     aa.climate,
                     aa.tags
-                FROM articles a
-                LEFT JOIN article_analysis aa ON a.id = aa.article_id
+                FROM "Articles" a
+                LEFT JOIN "ArticleAnalysis" aa ON a.id = aa.article_id
                 WHERE a.id = :id
             """),
             {"id": article_id}
         )
-        row = result.fetchone()
+        row = result.mappings().fetchone()
         
         return dict(row) if row else None
 
@@ -197,15 +199,14 @@ def get_all_articles(engine: Engine, limit: int = 100) -> list[Dict[str, Any]]:
                     aa.laws,
                     aa.climate,
                     aa.tags
-                FROM articles a
-                LEFT JOIN article_analysis aa ON a.id = aa.article_id
+                FROM "Articles" a
+                LEFT JOIN "ArticleAnalysis" aa ON a.id = aa.article_id
                 ORDER BY a.date DESC
                 LIMIT :limit
             """),
             {"limit": limit}
         )
-        
-        return [dict(row) for row in result]
+        return result.mappings().all()
 
 # Clean up connector on program exit
 import atexit
@@ -214,7 +215,8 @@ atexit.register(connector.close)
 if __name__ == "__main__":
     engine = get_engine()
     engine.connect()
-    # articles = get_all_articles(engine)
+    articles = get_all_articles(engine)
+    print(articles)
     # print(f"Found {len(articles)} articles")
 
     # insert_news(engine, [article_analysis])
