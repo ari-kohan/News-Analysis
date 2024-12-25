@@ -12,9 +12,11 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from data_ingestors.data import NewsData, NewsAnalysis
 from google.cloud.sql.connector import Connector
-from dotenv import load_dotenv
 
-load_dotenv()
+# Only load env vars from local file if running locally
+if not os.getenv("INSTANCE_CONNECTION_NAME"):
+    from dotenv import load_dotenv
+    load_dotenv()
 # Initialize Connector object
 connector = Connector()
 

@@ -18,6 +18,11 @@
     "rules": "storage.rules"
   },
   "emulators": {
+    "apphosting": {
+      "port": 5002,
+      "rootDirectory": "web_frontend",
+      "startCommandOverride": "npm run dev"
+    },
     "auth": {
       "port": 9099
     },

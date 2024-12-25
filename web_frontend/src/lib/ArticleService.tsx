@@ -1,4 +1,4 @@
-import { AddArticleData, GetArticleByIdData, getArticleById, addArticle, deleteArticle, TimestampString } from '@firebasegen/news-connector';
+import { getAllArticles, GetArticleByIdData, getArticleById, addArticle, deleteArticle, TimestampString, GetAllArticlesData, searchArticles } from '@firebasegen/news-connector';
 import { ConnectorConfig, DataConnect, QueryRef, QueryPromise } from 'firebase/data-connect';
 import { dataconnect } from '../config/firebase';
 
@@ -86,3 +86,24 @@ export const handleDeleteArticle = async (
     throw error;
   }
 };
+
+export const handleGetAllArticles = async (): Promise<GetAllArticlesData | null> => {
+  try {
+    const response = await getAllArticles(dataconnect);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching articles:", error);
+    return null;
+  }
+};
+
+export const handleSearchArticles = async (query: string): Promise<GetAllArticlesData | null> => {
+  try {
+    const response = await searchArticles(dataconnect, { query });
+    return response.data;
+  } catch (error) {
+    console.error("Error searching articles:", error);
+    return null;
+  }
+};
+

@@ -67,6 +67,7 @@ try {
   logger.error('Failed to initialize Firebase at module level:', error);
   // Instead of throwing, we might want to provide a fallback or handle gracefully
   db = null as any; // or some fallback/mock implementation
+  dataconnect = null as any; // or some fallback/mock implementation
 }
 
 export { db, dataconnect };

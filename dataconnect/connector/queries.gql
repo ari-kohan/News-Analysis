@@ -100,15 +100,38 @@ query GetArticleById($id: UUID!) @auth(level: PUBLIC) {
     }
 }
 
+query GetArticleAnalysisById($articleId: UUID!) @auth(level: PUBLIC) {
+  articleAnalysis(key: {articleId: $articleId}) {
+    articleId
+    article {
+      id
+      authors
+      date
+      link
+      source
+      title
+    }
+    agencies
+    climate
+    laws
+    people
+    places
+    summary
+    tags
+  }
+}
+
 query GetAllArticles @auth(level: PUBLIC) {
   articleAnalyses{
     article {
+        id
         title
         date
         source
         link
         authors
     }
+    articleId
     summary
     people
     places
@@ -117,4 +140,34 @@ query GetAllArticles @auth(level: PUBLIC) {
     climate
     tags
   }
+}
+
+query SearchArticles($query: String!) @auth(level: PUBLIC) {
+    articleAnalyses(where:{_or: [
+        {article: {title: {contains: $query}}}, 
+        {summary: {contains: $query}}, 
+        {people: {includes: $query}}, 
+        {places: {includes: $query}}, 
+        {agencies: {includes: $query}}, 
+        {laws: {includes: $query}}, 
+        {climate: {includes: $query}}, 
+        {tags: {includes: $query}}
+    ]}) {
+        article {
+            id
+            title
+            date
+            source
+            link
+            authors
+        }
+        articleId
+        summary
+        people
+        places
+        agencies
+        laws
+        climate
+        tags
+    }
 }

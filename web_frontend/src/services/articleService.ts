@@ -1,9 +1,9 @@
 import { collection, query, getDocs, where, orderBy, QueryConstraint, limit } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Article, SearchFilters } from '../types';
+import { FullArticle, SearchFilters } from '../types';
 import { logger } from '../utils/logger';
 
-export async function fetchArticles(searchQuery?: string, filters?: SearchFilters): Promise<Article[]> {
+export async function fetchArticles(searchQuery?: string, filters?: SearchFilters): Promise<FullArticle[]> {
   logger.info('Fetching articles with query:', { searchQuery, filters });
   
   try {
@@ -53,7 +53,7 @@ export async function fetchArticles(searchQuery?: string, filters?: SearchFilter
         source: data.source || '',
         link: data.link || '',
         authors: data.authors || []
-      } as Article;
+      } as FullArticle;
     });
 
     return articles;

@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Article, SearchFilters } from '../types';
+import { FullArticle, SearchFilters } from '../types';
 import { fetchArticles } from '../services/articleService';
 import { logger } from '../utils/logger';
 
 export function useArticles(searchQuery: string = '', filters: SearchFilters = {}) {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<FullArticle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

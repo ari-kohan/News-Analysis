@@ -78,6 +78,18 @@ export function getArticleByIdRef(dcOrVars, vars) {
 export function getArticleById(dcOrVars, vars) {
   return executeQuery(getArticleByIdRef(dcOrVars, vars));
 }
+export function getArticleAnalysisByIdRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetArticleAnalysisById', inputVars);
+}
+export function getArticleAnalysisById(dcOrVars, vars) {
+  return executeQuery(getArticleAnalysisByIdRef(dcOrVars, vars));
+}
 export function getAllArticlesRef(dc) {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   if('_useGeneratedSdk' in dcInstance) {
@@ -89,4 +101,16 @@ export function getAllArticlesRef(dc) {
 }
 export function getAllArticles(dc) {
   return executeQuery(getAllArticlesRef(dc));
+}
+export function searchArticlesRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'SearchArticles', inputVars);
+}
+export function searchArticles(dcOrVars, vars) {
+  return executeQuery(searchArticlesRef(dcOrVars, vars));
 }

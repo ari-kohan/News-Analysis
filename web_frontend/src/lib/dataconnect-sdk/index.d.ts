@@ -68,12 +68,14 @@ export interface DeleteArticleVariables {
 export interface GetAllArticlesData {
   articleAnalyses: ({
     article: {
+      id: UUIDString;
       title: string;
       date: TimestampString;
       source: string;
       link: string;
       authors: string[];
-    };
+    } & Article_Key;
+      articleId: UUIDString;
       summary?: string | null;
       people?: string[] | null;
       places?: string[] | null;
@@ -81,7 +83,32 @@ export interface GetAllArticlesData {
       laws?: string[] | null;
       climate?: string[] | null;
       tags?: string[] | null;
-  })[];
+  } & ArticleAnalysis_Key)[];
+}
+
+export interface GetArticleAnalysisByIdData {
+  articleAnalysis?: {
+    articleId: UUIDString;
+    article: {
+      id: UUIDString;
+      authors: string[];
+      date: TimestampString;
+      link: string;
+      source: string;
+      title: string;
+    } & Article_Key;
+      agencies?: string[] | null;
+      climate?: string[] | null;
+      laws?: string[] | null;
+      people?: string[] | null;
+      places?: string[] | null;
+      summary?: string | null;
+      tags?: string[] | null;
+  } & ArticleAnalysis_Key;
+}
+
+export interface GetArticleAnalysisByIdVariables {
+  articleId: UUIDString;
 }
 
 export interface GetArticleByIdData {
@@ -104,6 +131,31 @@ export interface GetArticleByIdData {
 
 export interface GetArticleByIdVariables {
   id: UUIDString;
+}
+
+export interface SearchArticlesData {
+  articleAnalyses: ({
+    article: {
+      id: UUIDString;
+      title: string;
+      date: TimestampString;
+      source: string;
+      link: string;
+      authors: string[];
+    } & Article_Key;
+      articleId: UUIDString;
+      summary?: string | null;
+      people?: string[] | null;
+      places?: string[] | null;
+      agencies?: string[] | null;
+      laws?: string[] | null;
+      climate?: string[] | null;
+      tags?: string[] | null;
+  } & ArticleAnalysis_Key)[];
+}
+
+export interface SearchArticlesVariables {
+  query: string;
 }
 
 export interface UpsertArticleData {
@@ -176,10 +228,28 @@ export function getArticleById(dc: DataConnect, vars: GetArticleByIdVariables): 
 
 
 /* Allow users to create refs without passing in DataConnect */
+export function getArticleAnalysisByIdRef(vars: GetArticleAnalysisByIdVariables): QueryRef<GetArticleAnalysisByIdData, GetArticleAnalysisByIdVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getArticleAnalysisByIdRef(dc: DataConnect, vars: GetArticleAnalysisByIdVariables): QueryRef<GetArticleAnalysisByIdData,GetArticleAnalysisByIdVariables>;
+
+export function getArticleAnalysisById(vars: GetArticleAnalysisByIdVariables): QueryPromise<GetArticleAnalysisByIdData, GetArticleAnalysisByIdVariables>;
+export function getArticleAnalysisById(dc: DataConnect, vars: GetArticleAnalysisByIdVariables): QueryPromise<GetArticleAnalysisByIdData,GetArticleAnalysisByIdVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
 export function getAllArticlesRef(): QueryRef<GetAllArticlesData, undefined>;/* Allow users to pass in custom DataConnect instances */
 export function getAllArticlesRef(dc: DataConnect): QueryRef<GetAllArticlesData,undefined>;
 
 export function getAllArticles(): QueryPromise<GetAllArticlesData, undefined>;
 export function getAllArticles(dc: DataConnect): QueryPromise<GetAllArticlesData,undefined>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function searchArticlesRef(vars: SearchArticlesVariables): QueryRef<SearchArticlesData, SearchArticlesVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function searchArticlesRef(dc: DataConnect, vars: SearchArticlesVariables): QueryRef<SearchArticlesData,SearchArticlesVariables>;
+
+export function searchArticles(vars: SearchArticlesVariables): QueryPromise<SearchArticlesData, SearchArticlesVariables>;
+export function searchArticles(dc: DataConnect, vars: SearchArticlesVariables): QueryPromise<SearchArticlesData,SearchArticlesVariables>;
 
 

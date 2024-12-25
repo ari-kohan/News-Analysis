@@ -4,18 +4,21 @@ import { SearchBar } from './components/SearchBar';
 import { ArticleCard } from './components/ArticleCard';
 import { ArticleModal } from './components/ArticleModal';
 import { AdminPanel } from './components/AdminPanel';
-import { Article, SearchFilters } from './types';
+import { FullArticle, SearchFilters } from './types';
 import { useArticles } from './hooks/useArticles';
+import { useAnalysis } from './hooks/useAnalysis';
 import { TagProvider, useTag } from './contexts/TagContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { AnalysisCard } from './components/AnalysisCard';
+import { AnalysisModal } from './components/AnalysisModal';
 
 function AppContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({});
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<any | null>(null);
   const { selectedTag } = useTag();
 
-  const { articles, loading, error } = useArticles(searchQuery, {
+  const { articles, loading, error } = useAnalysis(searchQuery, {
     ...searchFilters,
     tag: selectedTag,
   });
@@ -65,10 +68,10 @@ function AppContent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {articles.map((article) => (
-              <ArticleCard
-                key={article.id}
-                article={article}
+            {articles?.articleAnalyses.map((analysis) => (
+              <AnalysisCard
+                key={analysis.articleId}
+                analysis={analysis}
                 onClick={setSelectedArticle}
               />
             ))}
@@ -76,8 +79,8 @@ function AppContent() {
         )}
 
         {selectedArticle && (
-          <ArticleModal
-            article={selectedArticle}
+          <AnalysisModal
+            analysis={selectedArticle}
             onClose={() => setSelectedArticle(null)}
           />
         )}
