@@ -65,6 +65,11 @@ export interface DeleteArticleVariables {
   id: UUIDString;
 }
 
+export interface EventCluster_Key {
+  uid: string;
+  __typename?: 'EventCluster_Key';
+}
+
 export interface GetAllArticlesData {
   articleAnalyses: ({
     article: {
@@ -84,6 +89,21 @@ export interface GetAllArticlesData {
       climate?: string[] | null;
       tags?: string[] | null;
   } & ArticleAnalysis_Key)[];
+}
+
+export interface GetAllEventClustersData {
+  eventClusters: ({
+    uid: string;
+    title: string;
+    startDate: TimestampString;
+    endDate: TimestampString;
+    articleIds: string[];
+    primaryLocation?: string | null;
+    locations: string[];
+    keyEntities: string[];
+    tags: string[];
+    articles: string[];
+  } & EventCluster_Key)[];
 }
 
 export interface GetArticleAnalysisByIdData {
@@ -133,6 +153,25 @@ export interface GetArticleByIdVariables {
   id: UUIDString;
 }
 
+export interface GetEventClusterByArticleIdData {
+  eventClusters: ({
+    uid: string;
+    title: string;
+    startDate: TimestampString;
+    endDate: TimestampString;
+    articleIds: string[];
+    primaryLocation?: string | null;
+    locations: string[];
+    keyEntities: string[];
+    tags: string[];
+    articles: string[];
+  } & EventCluster_Key)[];
+}
+
+export interface GetEventClusterByArticleIdVariables {
+  articleId: string;
+}
+
 export interface SearchArticlesData {
   articleAnalyses: ({
     article: {
@@ -169,6 +208,23 @@ export interface UpsertArticleVariables {
   authors?: string[] | null;
   source: string;
   link: string;
+}
+
+export interface UpsertEventClusterData {
+  eventCluster_upsert: EventCluster_Key;
+}
+
+export interface UpsertEventClusterVariables {
+  uid: string;
+  title: string;
+  startDate: TimestampString;
+  endDate: TimestampString;
+  articleIds: string[];
+  primaryLocation?: string | null;
+  locations: string[];
+  keyEntities: string[];
+  tags: string[];
+  articles: string[];
 }
 
 
@@ -219,6 +275,15 @@ export function deleteArticleAnalysis(dc: DataConnect, vars?: DeleteArticleAnaly
 
 
 /* Allow users to create refs without passing in DataConnect */
+export function upsertEventClusterRef(vars: UpsertEventClusterVariables): MutationRef<UpsertEventClusterData, UpsertEventClusterVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function upsertEventClusterRef(dc: DataConnect, vars: UpsertEventClusterVariables): MutationRef<UpsertEventClusterData,UpsertEventClusterVariables>;
+
+export function upsertEventCluster(vars: UpsertEventClusterVariables): MutationPromise<UpsertEventClusterData, UpsertEventClusterVariables>;
+export function upsertEventCluster(dc: DataConnect, vars: UpsertEventClusterVariables): MutationPromise<UpsertEventClusterData,UpsertEventClusterVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
 export function getArticleByIdRef(vars: GetArticleByIdVariables): QueryRef<GetArticleByIdData, GetArticleByIdVariables>;
 /* Allow users to pass in custom DataConnect instances */
 export function getArticleByIdRef(dc: DataConnect, vars: GetArticleByIdVariables): QueryRef<GetArticleByIdData,GetArticleByIdVariables>;
@@ -251,5 +316,22 @@ export function searchArticlesRef(dc: DataConnect, vars: SearchArticlesVariables
 
 export function searchArticles(vars: SearchArticlesVariables): QueryPromise<SearchArticlesData, SearchArticlesVariables>;
 export function searchArticles(dc: DataConnect, vars: SearchArticlesVariables): QueryPromise<SearchArticlesData,SearchArticlesVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getEventClusterByArticleIdRef(vars: GetEventClusterByArticleIdVariables): QueryRef<GetEventClusterByArticleIdData, GetEventClusterByArticleIdVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getEventClusterByArticleIdRef(dc: DataConnect, vars: GetEventClusterByArticleIdVariables): QueryRef<GetEventClusterByArticleIdData,GetEventClusterByArticleIdVariables>;
+
+export function getEventClusterByArticleId(vars: GetEventClusterByArticleIdVariables): QueryPromise<GetEventClusterByArticleIdData, GetEventClusterByArticleIdVariables>;
+export function getEventClusterByArticleId(dc: DataConnect, vars: GetEventClusterByArticleIdVariables): QueryPromise<GetEventClusterByArticleIdData,GetEventClusterByArticleIdVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getAllEventClustersRef(): QueryRef<GetAllEventClustersData, undefined>;/* Allow users to pass in custom DataConnect instances */
+export function getAllEventClustersRef(dc: DataConnect): QueryRef<GetAllEventClustersData,undefined>;
+
+export function getAllEventClusters(): QueryPromise<GetAllEventClustersData, undefined>;
+export function getAllEventClusters(dc: DataConnect): QueryPromise<GetAllEventClustersData,undefined>;
 
 

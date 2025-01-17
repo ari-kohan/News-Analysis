@@ -48,3 +48,29 @@ class NewsData:
     # The link to the news article
     analysis: NewsAnalysis
     # The additional analysis of this news article
+
+
+@dataclass
+class EventCluster:
+    """
+    A class to represent a group of related news articles about the same event
+    """
+    
+    uid: str
+    # Unique identifier for the event cluster
+    title: str
+    # Representative title for the event
+    start_date: datetime
+    # Earliest article date in the cluster
+    end_date: datetime
+    # Latest article date in the cluster
+    article_ids: list[str]
+    # List of article UIDs in this cluster
+    primary_location: str
+    # Main location associated with the event
+    locations: list[str]
+    # All locations mentioned across articles
+    key_entities: list[str]
+    # Important entities (people, organizations) mentioned
+    tags: list[str]
+    # Aggregated tags from all articles

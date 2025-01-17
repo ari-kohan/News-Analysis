@@ -11,6 +11,12 @@ It has the same format as `ArticleAnalysis_Key`, but is only used as mutation re
 """
 scalar ArticleAnalysis_KeyOutput
 """
+✨ `EventCluster_KeyOutput` returns the primary key fields of table type `EventCluster`.
+
+It has the same format as `EventCluster_Key`, but is only used as mutation return value.
+"""
+scalar EventCluster_KeyOutput
+"""
 ✨ Generated data input type for table 'Article'. It includes all necessary fields for creating or upserting rows into table.
 """
 input Article_Data {
@@ -329,4 +335,198 @@ input ArticleAnalysis_Order {
   ✨ Generated from Field `ArticleAnalysis`.`summary` of type `String`
   """
   summary: OrderDirection
+}
+"""
+✨ Generated data input type for table 'EventCluster'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input EventCluster_Data {
+  """
+  ✨ Generated from Field `EventCluster`.`uid` of type `String!`
+  """
+  uid: String
+  """
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `EventCluster`.`uid` of type `String!`)
+  """
+  uid_expr: String_Expr
+  """
+  ✨ Generated from Field `EventCluster`.`articleIds` of type `[String]!`
+  """
+  articleIds: [String!]
+  """
+  ✨ Generated from Field `EventCluster`.`articles` of type `[String]!`
+  """
+  articles: [String!]
+  """
+  ✨ Generated from Field `EventCluster`.`endDate` of type `Timestamp!`
+  """
+  endDate: Timestamp
+  """
+  ✨ `_expr` server value variant of `endDate` (✨ Generated from Field `EventCluster`.`endDate` of type `Timestamp!`)
+  """
+  endDate_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `endDate` (✨ Generated from Field `EventCluster`.`endDate` of type `Timestamp!`)
+  """
+  endDate_time: Timestamp_Relative
+  """
+  ✨ Generated from Field `EventCluster`.`keyEntities` of type `[String]!`
+  """
+  keyEntities: [String!]
+  """
+  ✨ Generated from Field `EventCluster`.`locations` of type `[String]!`
+  """
+  locations: [String!]
+  """
+  ✨ Generated from Field `EventCluster`.`primaryLocation` of type `String`
+  """
+  primaryLocation: String
+  """
+  ✨ `_expr` server value variant of `primaryLocation` (✨ Generated from Field `EventCluster`.`primaryLocation` of type `String`)
+  """
+  primaryLocation_expr: String_Expr
+  """
+  ✨ Generated from Field `EventCluster`.`startDate` of type `Timestamp!`
+  """
+  startDate: Timestamp
+  """
+  ✨ `_expr` server value variant of `startDate` (✨ Generated from Field `EventCluster`.`startDate` of type `Timestamp!`)
+  """
+  startDate_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `startDate` (✨ Generated from Field `EventCluster`.`startDate` of type `Timestamp!`)
+  """
+  startDate_time: Timestamp_Relative
+  """
+  ✨ Generated from Field `EventCluster`.`tags` of type `[String]!`
+  """
+  tags: [String!]
+  """
+  ✨ Generated from Field `EventCluster`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `EventCluster`.`title` of type `String!`)
+  """
+  title_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'EventCluster'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input EventCluster_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [EventCluster_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: EventCluster_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [EventCluster_Filter!]
+  """
+  ✨ Generated from Field `EventCluster`.`uid` of type `String!`
+  """
+  uid: String_Filter
+  """
+  ✨ Generated from Field `EventCluster`.`articleIds` of type `[String]!`
+  """
+  articleIds: String_ListFilter
+  """
+  ✨ Generated from Field `EventCluster`.`articles` of type `[String]!`
+  """
+  articles: String_ListFilter
+  """
+  ✨ Generated from Field `EventCluster`.`endDate` of type `Timestamp!`
+  """
+  endDate: Timestamp_Filter
+  """
+  ✨ Generated from Field `EventCluster`.`keyEntities` of type `[String]!`
+  """
+  keyEntities: String_ListFilter
+  """
+  ✨ Generated from Field `EventCluster`.`locations` of type `[String]!`
+  """
+  locations: String_ListFilter
+  """
+  ✨ Generated from Field `EventCluster`.`primaryLocation` of type `String`
+  """
+  primaryLocation: String_Filter
+  """
+  ✨ Generated from Field `EventCluster`.`startDate` of type `Timestamp!`
+  """
+  startDate: Timestamp_Filter
+  """
+  ✨ Generated from Field `EventCluster`.`tags` of type `[String]!`
+  """
+  tags: String_ListFilter
+  """
+  ✨ Generated from Field `EventCluster`.`title` of type `String!`
+  """
+  title: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'EventCluster'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input EventCluster_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [EventCluster_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: EventCluster_Filter
+}
+"""
+✨ Generated key input type for table 'EventCluster'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input EventCluster_Key {
+  """
+  ✨ Generated from Field `EventCluster`.`uid` of type `String!`
+  """
+  uid: String
+  """
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `EventCluster`.`uid` of type `String!`)
+  """
+  uid_expr: String_Expr
+}
+"""
+✨ Generated list filter input type for table 'EventCluster'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input EventCluster_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: EventCluster_Filter
+}
+"""
+✨ Generated order input type for table 'EventCluster'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input EventCluster_Order {
+  """
+  ✨ Generated from Field `EventCluster`.`uid` of type `String!`
+  """
+  uid: OrderDirection
+  """
+  ✨ Generated from Field `EventCluster`.`endDate` of type `Timestamp!`
+  """
+  endDate: OrderDirection
+  """
+  ✨ Generated from Field `EventCluster`.`primaryLocation` of type `String`
+  """
+  primaryLocation: OrderDirection
+  """
+  ✨ Generated from Field `EventCluster`.`startDate` of type `Timestamp!`
+  """
+  startDate: OrderDirection
+  """
+  ✨ Generated from Field `EventCluster`.`title` of type `String!`
+  """
+  title: OrderDirection
 }

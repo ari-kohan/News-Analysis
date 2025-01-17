@@ -18,6 +18,15 @@ extend type Mutation {
     data: ArticleAnalysis_Data!
   ): ArticleAnalysis_KeyOutput! @fdc_generated(from: "ArticleAnalysis", purpose: INSERT_SINGLE)
   """
+  ✨ Insert a single `EventCluster` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  eventCluster_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: EventCluster_Data!
+  ): EventCluster_KeyOutput! @fdc_generated(from: "EventCluster", purpose: INSERT_SINGLE)
+  """
   ✨ Insert `Article` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   article_insertMany(
@@ -35,6 +44,15 @@ extend type Mutation {
     """
     data: [ArticleAnalysis_Data!]!
   ): [ArticleAnalysis_KeyOutput!]! @fdc_generated(from: "ArticleAnalysis", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `EventCluster` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  eventCluster_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [EventCluster_Data!]!
+  ): [EventCluster_KeyOutput!]! @fdc_generated(from: "EventCluster", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert or update a single `Article` into the table, based on the primary key. Returns the key of the newly inserted `Article`.
   """
@@ -54,6 +72,15 @@ extend type Mutation {
     data: ArticleAnalysis_Data!
   ): ArticleAnalysis_KeyOutput! @fdc_generated(from: "ArticleAnalysis", purpose: UPSERT_SINGLE)
   """
+  ✨ Insert or update a single `EventCluster` into the table, based on the primary key. Returns the key of the newly inserted `EventCluster`.
+  """
+  eventCluster_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: EventCluster_Data!
+  ): EventCluster_KeyOutput! @fdc_generated(from: "EventCluster", purpose: UPSERT_SINGLE)
+  """
   ✨ Insert or update `Article` objects into the table, based on the primary key. Returns the key of the newly inserted `Article`.
   """
   article_upsertMany(
@@ -71,6 +98,15 @@ extend type Mutation {
     """
     data: [ArticleAnalysis_Data!]!
   ): [ArticleAnalysis_KeyOutput!]! @fdc_generated(from: "ArticleAnalysis", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `EventCluster` objects into the table, based on the primary key. Returns the key of the newly inserted `EventCluster`.
+  """
+  eventCluster_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [EventCluster_Data!]!
+  ): [EventCluster_KeyOutput!]! @fdc_generated(from: "EventCluster", purpose: UPSERT_MULTIPLE)
   """
   ✨ Update a single `Article` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
@@ -115,6 +151,25 @@ extend type Mutation {
     data: ArticleAnalysis_Data!
   ): ArticleAnalysis_KeyOutput @fdc_generated(from: "ArticleAnalysis", purpose: UPDATE_SINGLE)
   """
+  ✨ Update a single `EventCluster` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  eventCluster_update(
+    """
+    The key used to identify the object.
+    """
+    key: EventCluster_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: EventCluster_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: EventCluster_Data!
+  ): EventCluster_KeyOutput @fdc_generated(from: "EventCluster", purpose: UPDATE_SINGLE)
+  """
   ✨ Update `Article` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
   article_updateMany(
@@ -153,6 +208,25 @@ extend type Mutation {
     data: ArticleAnalysis_Data!
   ): Int! @fdc_generated(from: "ArticleAnalysis", purpose: UPDATE_MULTIPLE)
   """
+  ✨ Update `EventCluster` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  eventCluster_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: EventCluster_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: EventCluster_Data!
+  ): Int! @fdc_generated(from: "EventCluster", purpose: UPDATE_MULTIPLE)
+  """
   ✨ Delete a single `Article` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   article_delete(
@@ -186,6 +260,20 @@ extend type Mutation {
     first: ArticleAnalysis_FirstRow
   ): ArticleAnalysis_KeyOutput @fdc_generated(from: "ArticleAnalysis", purpose: DELETE_SINGLE)
   """
+  ✨ Delete a single `EventCluster` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  eventCluster_delete(
+    """
+    The key used to identify the object.
+    """
+    key: EventCluster_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: EventCluster_FirstRow
+  ): EventCluster_KeyOutput @fdc_generated(from: "EventCluster", purpose: DELETE_SINGLE)
+  """
   ✨ Delete `Article` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
   article_deleteMany(
@@ -213,4 +301,18 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "ArticleAnalysis", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `EventCluster` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  eventCluster_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: EventCluster_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "EventCluster", purpose: DELETE_MULTIPLE)
 }

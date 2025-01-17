@@ -142,3 +142,31 @@ mutation AddArticleAnalysis
 mutation DeleteArticleAnalysis($key: ArticleAnalysis_Key)  @auth(level: NO_ACCESS) {
     articleAnalysis_delete(key: $key)
 }
+
+mutation UpsertEventCluster(
+    $uid: String!
+    $title: String!
+    $startDate: Timestamp!
+    $endDate: Timestamp!
+    $articleIds: [String!]!
+    $primaryLocation: String
+    $locations: [String!]!
+    $keyEntities: [String!]!
+    $tags: [String!]!
+    $articles: [String!]!
+) @auth(level: NO_ACCESS) {
+    eventCluster_upsert(
+        data: {
+            uid: $uid
+            title: $title
+            startDate: $startDate
+            endDate: $endDate
+            articleIds: $articleIds
+            primaryLocation: $primaryLocation
+            locations: $locations
+            keyEntities: $keyEntities
+            tags: $tags
+            articles: $articles
+        }
+    )
+}

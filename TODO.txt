@@ -1,0 +1,4 @@
+# TODO
+
+- Test event clustering
+- implement frontend as hosting instead of apphosting

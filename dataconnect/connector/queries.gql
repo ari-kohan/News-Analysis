@@ -171,3 +171,39 @@ query SearchArticles($query: String!) @auth(level: PUBLIC) {
         tags
     }
 }
+
+query GetEventClusterByArticleId($articleId: String!) @auth(level: PUBLIC) {
+    eventClusters(
+        where: {
+            articles: {
+                includes: $articleId
+            }
+        }
+    ) {
+        uid
+        title
+        startDate
+        endDate
+        articleIds
+        primaryLocation
+        locations
+        keyEntities
+        tags
+        articles
+    }
+}
+
+query GetAllEventClusters @auth(level: PUBLIC) {
+    eventClusters {
+        uid
+        title
+        startDate
+        endDate
+        articleIds
+        primaryLocation
+        locations
+        keyEntities
+        tags
+        articles
+    }
+}

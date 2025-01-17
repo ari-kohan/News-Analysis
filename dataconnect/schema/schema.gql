@@ -66,6 +66,18 @@ type ArticleAnalysis @table(name: "ArticleAnalysis", key: ["article"]) {
     tags: [String],
 }
 
+type EventCluster @table(name: "EventClusters", key: ["uid"]) {
+    uid: String! @col(name: "uid"),
+    title: String!,
+    startDate: Timestamp!,
+    endDate: Timestamp!,
+    articleIds: [String]!,
+    primaryLocation: String,
+    locations: [String]!,
+    keyEntities: [String]!,
+    tags: [String]!,
+    articles: [String]!,
+}
 
 # CREATE TABLE IF NOT EXISTS news (
 #     id INTEGER PRIMARY KEY AUTOINCREMENT,

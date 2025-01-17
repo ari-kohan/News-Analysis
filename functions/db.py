@@ -11,7 +11,7 @@ from datetime import datetime
 import sqlalchemy
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
-from data_ingestors.data import NewsData, NewsAnalysis
+from data_ingestors.data import NewsData, NewsAnalysis, EventCluster
 from google.cloud.sql.connector import Connector
 
 # Only load env vars from local file if running locally
@@ -130,6 +130,102 @@ def insert_news(engine: Engine, news_items: list[NewsData]) -> None:
             )
 
         conn.commit()
+
+
+def _format_event_cluster_for_db(cluster: EventCluster) -> Dict[str, Any]:
+    """Format event cluster data for the EventClusters table"""
+    return {
+        "uid": cluster.uid,
+        "title": cluster.title,
+        "start_date": cluster.start_date.isoformat(),
+        "end_date": cluster.end_date.isoformat(),
+        "article_ids": cluster.article_ids,
+        "primary_location": cluster.primary_location,
+        "locations": cluster.locations,
+        "key_entities": cluster.key_entities,
+        "tags": cluster.tags,
+        "articles": cluster.article_ids  # Using article_ids for articles field
+    }
+
+
+def insert_event_clusters(engine: Engine, clusters: list[EventCluster]) -> None:
+    """
+    Insert event clusters into the database
+    
+    Args:
+        engine: The database engine
+        clusters: A list of EventCluster objects
+    """
+    with engine.connect() as conn:
+        # Start a transaction
+        with conn.begin():
+            for cluster in clusters:
+                cluster_data = _format_event_cluster_for_db(cluster)
+                
+                # Use PostgreSQL upsert (INSERT ... ON CONFLICT DO UPDATE)
+                query = """
+                INSERT INTO event_clusters (
+                    uid, title, start_date, end_date, article_ids,
+                    primary_location, locations, key_entities, tags, articles
+                ) VALUES (
+                    :uid, :title, :start_date, :end_date, :article_ids,
+                    :primary_location, :locations, :key_entities, :tags, :articles
+                )
+                ON CONFLICT (uid) DO UPDATE SET
+                    title = EXCLUDED.title,
+                    start_date = EXCLUDED.start_date,
+                    end_date = EXCLUDED.end_date,
+                    article_ids = EXCLUDED.article_ids,
+                    primary_location = EXCLUDED.primary_location,
+                    locations = EXCLUDED.locations,
+                    key_entities = EXCLUDED.key_entities,
+                    tags = EXCLUDED.tags,
+                    articles = EXCLUDED.articles
+                """
+                
+                # Execute the query
+                conn.execute(text(query), cluster_data)
+
+
+def get_all_event_clusters(engine: Engine, limit: int = 100) -> list[EventCluster]:
+    """
+    Get all event clusters from the database
+    
+    Args:
+        engine: The database engine
+        limit: Maximum number of clusters to return
+        
+    Returns:
+        List of EventCluster objects
+    """
+    with engine.connect() as conn:
+        query = """
+        SELECT 
+            uid, title, start_date, end_date, article_ids,
+            primary_location, locations, key_entities, tags, articles
+        FROM event_clusters
+        ORDER BY end_date DESC
+        LIMIT :limit
+        """
+        
+        result = conn.execute(text(query), {"limit": limit})
+        clusters = []
+        
+        for row in result:
+            cluster = EventCluster(
+                uid=row.uid,
+                title=row.title,
+                start_date=datetime.fromisoformat(row.start_date),
+                end_date=datetime.fromisoformat(row.end_date),
+                article_ids=row.article_ids,
+                primary_location=row.primary_location,
+                locations=row.locations,
+                key_entities=row.key_entities,
+                tags=row.tags
+            )
+            clusters.append(cluster)
+            
+        return clusters
 
 
 def search_articles(engine: Engine, query: str) -> list[Dict[str, Any]]:
