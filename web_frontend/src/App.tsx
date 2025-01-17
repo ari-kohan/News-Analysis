@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Newspaper } from 'lucide-react';
 import { SearchBar } from './components/SearchBar';
 import { ArticleCard } from './components/ArticleCard';
@@ -18,15 +18,16 @@ function AppContent() {
   const [selectedArticle, setSelectedArticle] = useState<any | null>(null);
   const { selectedTag } = useTag();
 
-  const { articles, loading, error } = useAnalysis(searchQuery, {
-    ...searchFilters,
-    tag: selectedTag,
-  });
 
   const handleSearch = (query: string, filters: SearchFilters) => {
     setSearchQuery(query);
     setSearchFilters(filters);
   };
+
+  const { articles, loading, error } = useAnalysis(searchQuery, {
+    ...searchFilters,
+    tag: selectedTag,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,7 +71,7 @@ function AppContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {articles?.articleAnalyses.map((analysis) => (
               <AnalysisCard
-                key={analysis.articleId}
+                key={analysis.article.id}
                 analysis={analysis}
                 onClick={setSelectedArticle}
               />
