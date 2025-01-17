@@ -9,3 +9,4 @@ beautifulsoup4==4.12.3
 black==24.10.0
 bs4==0.0.2
 cloud_sql_python_connector==1.14.0
+dotenv==1.0.1

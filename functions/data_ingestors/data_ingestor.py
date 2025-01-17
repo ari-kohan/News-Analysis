@@ -16,6 +16,7 @@ class DataIngestor(abc.ABC):
     """
     An abstract class to handle the reading and formatting of rss feed data
     """
+
     url: str
     type: IngestorType
 

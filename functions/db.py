@@ -2,6 +2,7 @@
 A set of functions to interact with the news database
 Reads, writes, and searches the db
 """
+
 import os
 import json
 from typing import Optional, Dict, Any
@@ -16,6 +17,7 @@ from google.cloud.sql.connector import Connector
 # Only load env vars from local file if running locally
 if not os.getenv("INSTANCE_CONNECTION_NAME"):
     from dotenv import load_dotenv
+
     load_dotenv()
 # Initialize Connector object
 connector = Connector()
@@ -26,8 +28,10 @@ DB_USER = os.environ["DB_USER"]
 DB_PASS = os.environ["DB_PASS"]
 DB_NAME = os.environ["DB_NAME"]
 
+
 def get_engine() -> Engine:
     """Create database connection engine using Cloud SQL Python Connector"""
+
     def getconn():
         return connector.connect(
             INSTANCE_CONNECTION_NAME,
@@ -36,12 +40,13 @@ def get_engine() -> Engine:
             password=DB_PASS,
             db=DB_NAME,
         )
-    
+
     engine = create_engine(
         "postgresql+pg8000://",
         creator=getconn,
     )
     return engine
+
 
 def _format_article_for_db(news: NewsData) -> Dict[str, Any]:
     """Format article data for the Articles table"""
@@ -53,6 +58,7 @@ def _format_article_for_db(news: NewsData) -> Dict[str, Any]:
         "source": news.source,
         "link": news.link,
     }
+
 
 def _format_analysis_for_db(article_id: str, news: NewsAnalysis) -> Dict[str, Any]:
     """Format analysis data for the ArticleAnalysis table"""
@@ -67,16 +73,17 @@ def _format_analysis_for_db(article_id: str, news: NewsAnalysis) -> Dict[str, An
         "tags": news.tags,
     }
 
+
 def _filter_existing_articles(engine: Engine, links: list[str]) -> list[str]:
     """Filter out articles that already exist in the database based on their links"""
     with engine.connect() as conn:
         result = conn.execute(
-            text("SELECT link FROM articles WHERE link = ANY(:links)"),
-            {"links": links}
+            text("SELECT link FROM articles WHERE link = ANY(:links)"), {"links": links}
         )
         existing_links = {row[0] for row in result}
-    
+
     return [link for link in links if link not in existing_links]
+
 
 def insert_news(engine: Engine, news_items: list[NewsData]) -> None:
     """
@@ -88,7 +95,7 @@ def insert_news(engine: Engine, news_items: list[NewsData]) -> None:
     links = [news.link for news in news_items]
     new_links = _filter_existing_articles(engine, links)
     new_news = [news for news in news_items if news.link in new_links]
-    
+
     if not new_news:
         return
 
@@ -96,29 +103,34 @@ def insert_news(engine: Engine, news_items: list[NewsData]) -> None:
         # Insert articles and collect their IDs
         for news in new_news:
             article_data = _format_article_for_db(news)
-            
+
             # Insert article
             conn.execute(
-                text("""
+                text(
+                    """
                     INSERT INTO articles (id, title, date, authors, source, link)
                     VALUES (:id, :title, :date, :authors, :source, :link)
-                """),
-                article_data
+                """
+                ),
+                article_data,
             )
-            
+
             # Insert article analysis
             analysis_data = _format_analysis_for_db(article_data["id"], news.analysis)
             conn.execute(
-                text("""
+                text(
+                    """
                     INSERT INTO article_analysis 
                     (article_id, summary, people, places, agencies, laws, climate, tags)
                     VALUES 
                     (:article_id, :summary, :people, :places, :agencies, :laws, :climate, :tags)
-                """),
-                analysis_data
+                """
+                ),
+                analysis_data,
             )
-        
+
         conn.commit()
+
 
 def search_articles(engine: Engine, query: str) -> list[Dict[str, Any]]:
     """
@@ -128,10 +140,11 @@ def search_articles(engine: Engine, query: str) -> list[Dict[str, Any]]:
     :return: A list of article dictionaries with their analysis
     """
     clean_query = f"%{query.strip().lower()}%"
-    
+
     with engine.connect() as conn:
         result = conn.execute(
-            text("""
+            text(
+                """
                 SELECT 
                     a.*,
                     aa.summary,
@@ -147,11 +160,13 @@ def search_articles(engine: Engine, query: str) -> list[Dict[str, Any]]:
                     LOWER(a.title) LIKE :query 
                     OR :query = ANY(aa.tags)
                 ORDER BY a.date DESC
-            """),
-            {"query": clean_query}
+            """
+            ),
+            {"query": clean_query},
         )
-        
+
         return result.mappings().all()
+
 
 def get_article_by_id(engine: Engine, article_id: str) -> Optional[Dict[str, Any]]:
     """
@@ -162,7 +177,8 @@ def get_article_by_id(engine: Engine, article_id: str) -> Optional[Dict[str, Any
     """
     with engine.connect() as conn:
         result = conn.execute(
-            text("""
+            text(
+                """
                 SELECT 
                     a.*,
                     aa.summary,
@@ -175,12 +191,14 @@ def get_article_by_id(engine: Engine, article_id: str) -> Optional[Dict[str, Any
                 FROM "Articles" a
                 LEFT JOIN "ArticleAnalysis" aa ON a.id = aa.article_id
                 WHERE a.id = :id
-            """),
-            {"id": article_id}
+            """
+            ),
+            {"id": article_id},
         )
         row = result.mappings().fetchone()
-        
+
         return dict(row) if row else None
+
 
 def get_all_articles(engine: Engine, limit: int = 100) -> list[Dict[str, Any]]:
     """
@@ -191,7 +209,8 @@ def get_all_articles(engine: Engine, limit: int = 100) -> list[Dict[str, Any]]:
     """
     with engine.connect() as conn:
         result = conn.execute(
-            text("""
+            text(
+                """
                 SELECT 
                     a.*,
                     aa.summary,
@@ -205,13 +224,16 @@ def get_all_articles(engine: Engine, limit: int = 100) -> list[Dict[str, Any]]:
                 LEFT JOIN "ArticleAnalysis" aa ON a.id = aa.article_id
                 ORDER BY a.date DESC
                 LIMIT :limit
-            """),
-            {"limit": limit}
+            """
+            ),
+            {"limit": limit},
         )
         return result.mappings().all()
 
+
 # Clean up connector on program exit
 import atexit
+
 atexit.register(connector.close)
 
 if __name__ == "__main__":

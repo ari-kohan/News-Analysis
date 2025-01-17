@@ -25,7 +25,11 @@ class RSSReader(DataIngestor):
 
     type = IngestorType.RSS
 
-    def fetch(self, last_fetched_time: Optional[datetime] = None, last_etag: Optional[str] = None):
+    def fetch(
+        self,
+        last_fetched_time: Optional[datetime] = None,
+        last_etag: Optional[str] = None,
+    ):
         """
         Fetch the most recent RSS feed
         Fetch logic credit to https://brntn.me/blog/respectfully-requesting-rss-feeds/
@@ -121,15 +125,9 @@ class ProPublicaRSSReader(RSSReader):
         TODO clean with beautifulsoup
         """
         for entry in data.entries:
-            entry["summary"] = bs4.BeautifulSoup(
-                entry["summary"], "html.parser"
-            ).text
-            entry["summary"] = entry["summary"].replace(
-                "\n", " "
-            )
-            entry["summary"] = entry["summary"].replace(
-                "\t", " "
-            )
+            entry["summary"] = bs4.BeautifulSoup(entry["summary"], "html.parser").text
+            entry["summary"] = entry["summary"].replace("\n", " ")
+            entry["summary"] = entry["summary"].replace("\t", " ")
         return data
 
     def format_data(self, data: List[feedparser.FeedParserDict]) -> List[dict]:
@@ -188,11 +186,11 @@ def read_rss_feeds() -> None:
 
 
 if __name__ == "__main__":
-    #read_rss_feeds()
+    # read_rss_feeds()
     reader = ProPublicaRSSReader()
     data, _ = reader.fetch()
     data = reader.clean_data(data)
     breakpoint()
     data = reader.format_data(data)
     breakpoint()
-    #save_rss_file("rss_feed.json", data)
+    # save_rss_file("rss_feed.json", data)

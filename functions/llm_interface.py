@@ -80,10 +80,62 @@ def compare_texts(text1: str, text2: str) -> str:
         COMPARISON_TEMPLATE.format_messages(text1=text1, text2=text2)
     ).content
 
+
 def extract_information(text: str) -> str:
     return OPENAI_MODEL.invoke(
         INFORMATION_EXTRACTION_TEMPLATE.format_messages(text=text)
     ).content
+
+
+def format_analysis(analyses: List[str]) -> List[NewsAnalysis]:
+    news_analyses = []
+    for analysis in analyses:
+        article = json.loads(analysis.strip("json"))
+        news_analyses.append(
+            NewsAnalysis(
+                uid=article["uid"],
+                summary=info["summary"],
+                people=info["people"],
+                places=info["places"],
+                agencies=info["agencies"],
+                laws=info["laws"],
+                climate=info["climate"],
+                tags=[],
+            )
+        )
+    return news_analyses
+
+
+def analyse_articles(articles: List[dict]) -> List[NewsData]:
+    news_data = []
+    for article in articles:
+        article_content = article["content"]
+        info = extract_information(article_content)
+        info = info.strip("json")
+        info = json.loads(info)
+        article_analysis = NewsAnalysis(
+            uid=article["uid"],
+            summary=info["summary"],
+            people=info["people"],
+            places=info["places"],
+            agencies=info["agencies"],
+            laws=info["laws"],
+            climate=info["climate"],
+            tags=[],
+        )
+        news_data.append(
+            NewsData(
+                title=article["title"],
+                link=article["link"],
+                authors=article["authors"],
+                date=article["date"],
+                content=article["content"],
+                source=article["source"],
+                uid=article["uid"],
+                analysis=article_analysis,
+            )
+        )
+    return news_data
 
 
 if __name__ == "__main__":
@@ -92,7 +144,7 @@ if __name__ == "__main__":
     article = articles[0]
     article_content = article["content"]
     info = extract_information(article_content)
-    info = info.strip('json')
+    info = info.strip("json")
     info = json.loads(info)
     article_analysis = NewsAnalysis(
         uid=article["uid"],
@@ -102,7 +154,8 @@ if __name__ == "__main__":
         agencies=info["agencies"],
         laws=info["laws"],
         climate=info["climate"],
-        tags=[])
+        tags=[],
+    )
     article_data = NewsData(
         title=article["title"],
         link=article["link"],
@@ -111,9 +164,9 @@ if __name__ == "__main__":
         content=article["content"],
         source=article["source"],
         uid=article["uid"],
-        analysis=None
+        analysis=None,
     )
     print(json.dumps(article_data, default=lambda o: o.__dict__))
     print(">>>>>>>>>>>>>>>>>>>>>")
     print(json.dumps(article_analysis, default=lambda o: o.__dict__))
-    #print(compare_texts(TEST_STR, TEST_STR_2))
+    # print(compare_texts(TEST_STR, TEST_STR_2))

@@ -1,3 +1,4 @@
+from typing import List
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -21,7 +22,7 @@ def delete_collection(coll_ref, batch_size: int = 10):
 
     if deleted >= batch_size:
         return delete_collection(coll_ref, batch_size)
-    
+
 
 def add_rss_readers_to_firebase(db):
     for source in RSSReader.__subclasses__():
@@ -31,17 +32,19 @@ def add_rss_readers_to_firebase(db):
             "type": s.type.name,
             "url": s.url,
             "last_etag": None,
-            "last_fetched": None
+            "last_fetched": None,
         }
-        
+
         db.collection("Data Sources").document(reader["name"]).set(reader)
 
 
 def update_rss_etag_and_timestamp(db, name, etag):
-    db.collection("Data Sources").document(name).update({"last_etag": etag, "last_fetched": firestore.SERVER_TIMESTAMP})
+    db.collection("Data Sources").document(name).update(
+        {"last_etag": etag, "last_fetched": firestore.SERVER_TIMESTAMP}
+    )
 
 
-def fetch_source_data(db):
+def fetch_and_store_source_data(db):
     """
     Retrieve all data from the rss/api (only rss rn) sources, if it is new data
     (determined by a unique uid hashed from the url) add it to the firestore db
@@ -67,25 +70,27 @@ def fetch_source_data(db):
         update_rss_etag_and_timestamp(db, name, new_etag)
         for d in data:
             if d["uid"] not in existing_articles:
-                d["analysed"] = False
+                d["analysed"] = True
                 db.collection("articles").document(d["uid"]).set(d)
                 new_articles.append(d["uid"])
     if new_articles:
-        db.collection("article_ids").document("id").update({"articles": firestore.ArrayUnion(new_articles)})
+        db.collection("article_ids").document("id").update(
+            {"articles": firestore.ArrayUnion(new_articles)}
+        )
     return new_articles
 
 
 if __name__ == "__main__":
     # Fetch the service account key JSON file contents
-    cred = credentials.Certificate('news_retriever.local.json')
+    cred = credentials.Certificate("news_retriever.local.json")
 
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     print(db._client_info.__dict__)
-    #add_rss_readers_to_firebase(db)
-    #fetch_source_data(db)
-    
+    # add_rss_readers_to_firebase(db)
+    # fetch_source_data(db)
+
     # Store existing articles for ease of lookup
     # articles = []
     # for a in db.collection('articles').stream():
@@ -93,5 +98,3 @@ if __name__ == "__main__":
     # print(articles)
     # db.collection("article_ids").document("id").set({"articles": articles})
     print(db.collection("article_ids").document("id").get().to_dict())
-
-

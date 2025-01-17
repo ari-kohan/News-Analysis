@@ -7,6 +7,7 @@ class NewsAnalysis:
     """
     A class to store analysis of news articles
     """
+
     uid: str
     # The ID of the analyzed article
     summary: str
